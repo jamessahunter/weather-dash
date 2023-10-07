@@ -52,11 +52,18 @@ citiesCont.on("click","h3",function(event){
 
 
 function fetchLatLon(city){
-    var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
+    if(city.includes(",")){
+        var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city.split(",")[0].trim()+ "," +city.split(",")[1].trim()+ ",USA&limit=1&appid=5b9958094719db83e44615746cf27208"
+    }
+    else{
+        var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
+    }
+    console.log(cityUrl);
     fetch(cityUrl)
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
+                console.log(data);
                 var lat=data[0].lat;
                 var lon=data[0].lon;
                 fetchWeatherCurrent(lat,lon);
@@ -93,30 +100,32 @@ function fetchWeatherFuture(lat,lon){
 }
 
 function displayCurrent(data){
+    currentWeather.text("");
     today=dayjs().format('M/D');
     var icon=getIcon(data);
     var dateCurr=$("<h2>").text(today);
     var iconCurr=$("<p>").text(icon);
-    var tempCurr=$("<p>").text("Temp: "+data.main.temp);
-    var windCurr=$("<p>").text("Wind: "+data.wind.speed);
-    var humCurr=$("<p>").text("Humidity: "+ data.main.humidity);
+    var tempCurr=$("<p>").text("Temp: "+data.main.temp+ " °F");
+    var windCurr=$("<p>").text("Wind: "+data.wind.speed+" MPH");
+    var humCurr=$("<p>").text("Humidity: "+ data.main.humidity+"%");
     currentWeather.append(dateCurr,iconCurr,tempCurr,windCurr,humCurr);
 }
 
 function displayFuture(data){
     // console.log(data.list);
+    futureWeather.text("");
     for(var i=5;i<40;i+=8){
-        // console.log(data[i].dt_txt);
+        console.log(data[i]);
         var date=dayjs(data[i].dt_txt).format("M/D");
         // console.log(date);
         var icon=getIcon(data[i]);
         var sectionCard=$("<section>").addClass("card");
         var dateFut=$("<h2>").text(date);
         var iconFut=$("<p>").text(icon);
-        var tempFut=$("<p>").text("Temp: " + data[i].main.temp);
-        var windFut=$("<p>").text("Wind: " + data[i].wind.speed);
-        var humFut=$("<p>").text("Humidity: " + data[i].main.humidity);
-        sectionCard.append(dateFut,iconFut,tempFut,windFut,humFut);
+        var tempFut=$("<p>").text("Temp: " + data[i].main.temp+ " °F");
+        var windFut=$("<p>").text("Wind: " + data[i].wind.speed+" MPH");
+        var humFut=$("<p>").text("Humidity: " + data[i].main.humidity+"%");
+        sectionCard.append(dateFut,iconFut,tempFut,windFut,humFut).addClass("col");
         futureWeather.append(sectionCard);
     }
 
