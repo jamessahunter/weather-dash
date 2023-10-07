@@ -44,6 +44,12 @@ button.on("click", function(event){
     fetchLatLon(cityInput.val());
 })
 
+citiesCont.on("click","h3",function(event){
+    var cityClicked=event.target.textContent;
+    fetchLatLon(cityClicked);
+
+})
+
 
 function fetchLatLon(city){
     var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
