@@ -2,6 +2,7 @@ var city=$("#input-city");
 var button=$(".btn");
 var currentWeather=$('#current-weather');
 var futureWeather=$("#future-weather");
+var today;
 
 button.on("click", function(event){
     event.preventDefault();
@@ -22,7 +23,7 @@ function fetchLatLon(city){
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
-                console.log(data);
+                // console.log(data);
                 // console.log(data[0]);
                 // console.log(data[0].lon);
                 // console.log(data[0].lat);
@@ -42,10 +43,12 @@ function fetchWeatherCurrent(lat,lon){
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
+                displayCurrent(data);
                 console.log(data);
                 console.log(data.wind.speed);
                 console.log(data.main.temp);
                 console.log(data.main.humidity);
+
             })
         }
     })
@@ -65,4 +68,45 @@ function fetchWeatherFuture(lat,lon){
             })
         }
     })
+}
+
+function displayCurrent(data){
+    today=dayjs().format('M/D');
+    var icon=getIcon(data);
+    var dateCurr=$("<h2>").text(today);
+    var iconCurr=$("<p>").text(icon);
+    var tempCurr=$("<p>").text(data.main.temp);
+    var windCurr=$("<p>").text(data.wind.speed);
+    var humCurr=$("<p>").text(data.main.humidity);
+    currentWeather.append(dateCurr,iconCurr,tempCurr,windCurr,humCurr);
+
+
+}
+
+function getIcon(data){
+    var icon;
+    switch(data.weather[0].main){
+        case "Clear":
+            icon="☀"
+            break;
+        case "Clouds":
+            icon="☁"
+            break;
+        case "Drizzle":
+            icon="🌦"
+            break;
+        case "Rain":
+            icon="🌧"
+            break;    
+        case "Thunderstorm":
+           icon="⛈"
+            break;
+        case "Snow":
+            icon="🌨"
+            break;    
+        default:
+            icon="🌫"
+    }
+    return icon;
+
 }
