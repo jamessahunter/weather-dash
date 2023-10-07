@@ -1,9 +1,12 @@
-var city=$("#input-city");
+var cityInput=$("#input-city");
 var button=$(".btn");
 var currentWeather=$('#current-weather');
 var futureWeather=$("#future-weather");
+var citiesCont=$("#cities-container");
 var today;
+var cities=[];
 
+init();
 
 function init(){
     var storedCities=JSON.parse(localStorage.getItem("cities"));
@@ -12,18 +15,33 @@ function init(){
       if (storedCities!==null){
         //put the array into the events variable
         cities=storedCities;
-      }
 
+      }
+      displayCities();
 }
 
+function displayCities(){
+    citiesCont.text("");
+    for (let i = 0; i < cities.length; i++) {
+        var city=$("<h3>").text(cities[i]);
+        console.log(city);
+        citiesCont.append(city);
+    }
+}
+
+function storeCities(){
+    localStorage.setItem("cities",JSON.stringify(cities));
+}
 
 button.on("click", function(event){
     event.preventDefault();
-    // console.log("works");
-    // console.log(city);
-    var cityInput=city.val();
-    // console.log(cityInput);
-    fetchLatLon(cityInput);
+    if(cityInput.val() === ""){
+        return;
+    }
+    cities.push(cityInput.val());
+    storeCities();
+    displayCities();
+    fetchLatLon(cityInput.val());
 })
 
 
@@ -33,10 +51,6 @@ function fetchLatLon(city){
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
-                // console.log(data);
-                // console.log(data[0]);
-                // console.log(data[0].lon);
-                // console.log(data[0].lat);
                 var lat=data[0].lat;
                 var lon=data[0].lon;
                 fetchWeatherCurrent(lat,lon);
@@ -54,11 +68,6 @@ function fetchWeatherCurrent(lat,lon){
         if (response.ok){
             response.json().then(function(data){
                 displayCurrent(data);
-                console.log(data);
-                console.log(data.wind.speed);
-                console.log(data.main.temp);
-                console.log(data.main.humidity);
-
             })
         }
     })
@@ -71,11 +80,7 @@ function fetchWeatherFuture(lat,lon){
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
-                // console.log(data);
                 displayFuture(data.list);
-                // console.log(data.wind.speed);
-                // console.log(data.main.temp);
-                // console.log(data.main.humidity);
             })
         }
     })
