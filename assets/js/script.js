@@ -28,10 +28,25 @@ function fetchLatLon(city){
                 console.log(data[0].lat);
                 var lat=data[0].lat;
                 var lon=data[0].lon;
+                fetchWeather(lat,lon);
             })
         }
     })
 
+}
 
+function fetchWeather(lat,lon){
+    var currentUrl="https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=5b9958094719db83e44615746cf27208"
+    fetch(currentUrl)
+    .then(function(response){
+        if (response.ok){
+            response.json().then(function(data){
+                console.log(data);
+                console.log(data.wind.speed);
+                console.log(data.main.temp);
+                console.log(data.main.humidity);
+            })
+        }
+    })
 
 }
