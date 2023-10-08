@@ -23,8 +23,8 @@ function init(){
 function displayCities(){
     citiesCont.text("");
     for (let i = 0; i < cities.length; i++) {
-        var city=$("<h3>").text(cities[i]);
-        console.log(city);
+        var city=$("<h4>").text(cities[i]);
+        // console.log(city);
         citiesCont.append(city);
     }
 }
@@ -44,7 +44,7 @@ button.on("click", function(event){
     fetchLatLon(cityInput.val());
 })
 
-citiesCont.on("click","h3",function(event){
+citiesCont.on("click","h4",function(event){
     var cityClicked=event.target.textContent;
     fetchLatLon(cityClicked);
 
@@ -58,12 +58,12 @@ function fetchLatLon(city){
     else{
         var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
     }
-    console.log(cityUrl);
+    // console.log(cityUrl);
     fetch(cityUrl)
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
-                console.log(data);
+                // console.log(data);
                 var lat=data[0].lat;
                 var lon=data[0].lon;
                 fetchWeatherCurrent(lat,lon);
@@ -100,15 +100,17 @@ function fetchWeatherFuture(lat,lon){
 }
 
 function displayCurrent(data){
+    console.log(data);
     currentWeather.text("");
     today=dayjs().format('M/D');
     var icon=getIcon(data);
-    var dateCurr=$("<h2>").text(today);
+    var cityCurr=$("<h2>").text(data.name);
+    var dateCurr=$("<h3>").text(today);
     var iconCurr=$("<p>").text(icon);
     var tempCurr=$("<p>").text("Temp: "+data.main.temp+ " °F");
     var windCurr=$("<p>").text("Wind: "+data.wind.speed+" MPH");
     var humCurr=$("<p>").text("Humidity: "+ data.main.humidity+"%");
-    currentWeather.append(dateCurr,iconCurr,tempCurr,windCurr,humCurr);
+    currentWeather.append(cityCurr,dateCurr,iconCurr,tempCurr,windCurr,humCurr).addClass("card");
 }
 
 function displayFuture(data){
