@@ -1,4 +1,6 @@
-
+body{
+    background: linear-gradient(to bottom,#3d404e,#8b88a0);
+}
 
 h1, #cities-container, #search-container{
     text-align: center;
@@ -29,4 +31,12 @@ h4{
     margin-right: 15px;
     padding: 0px 12px;
     background: linear-gradient(to top,#51bddb,#2294e0);
+}
+#search-container{
+    background: linear-gradient(to left,#51bddb,#2294e0);
+    color: black;
+}
+.form-text p{
+    margin-bottom: .5rem;
+    color: black;
 }
