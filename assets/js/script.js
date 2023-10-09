@@ -6,6 +6,7 @@ var futureWeather=$("#future-weather");
 var citiesCont=$("#cities-container");
 var today;
 var cities=[];
+var repeat=0;
 // call for initial function
 init();
 
@@ -18,7 +19,6 @@ function init(){
       if (storedCities!==null){
         //put the array into the events variable
         cities=storedCities;
-
       }
     // calls display cities
       displayCities();
@@ -35,6 +35,7 @@ function displayCities(){
         // appends new element to the page
         citiesCont.append(city);
     }
+    repeat=0;
 }
 // function to store the cities
 function storeCities(){
@@ -58,6 +59,7 @@ button.on("click", function(event){
 citiesCont.on("click","h4",function(event){
     //gets the city that was clicked on
     var cityClicked=event.target.textContent;
+    repeat=1;
     //calls fetch lat and lon
     fetchLatLon(cityClicked);
 
@@ -73,30 +75,32 @@ function fetchLatLon(city){
     else{
         var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
     }
-    // console.log(cityUrl);
     fetch(cityUrl)
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
-                // console.log(data);
+                console.log(data[0]);
                 //checks that a city insidethe us was entered
-                if(data===null){
+                if(data[0]!==null){
                     // retrieves that lat and lon data
                     var lat=data[0].lat;
                     var lon=data[0].lon;
                     //calls the fetch weather functions
                     fetchWeatherCurrent(lat,lon);
                     fetchWeatherFuture(lat,lon);
+                    //checks to see if the city is already on the list
+                    if(repeat===0){
                     // adds the city to the cities list
                     cities.push(cityInput.val());
+                    }
                     //calls stores cities function
                     storeCities();
                     // calls display cities function
                     displayCities();
-
+                    // clears out input field
+                    cityInput.val("");
                 }
                 else{
-                    // console.log("failed");
                     return;
                 }
             })
@@ -106,13 +110,15 @@ function fetchLatLon(city){
 
 }
 
-// fetches the cirrent weather
+// fetches the current weather
 function fetchWeatherCurrent(lat,lon){
+    console.log("test")
     var currentUrl="https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=5b9958094719db83e44615746cf27208&units=imperial";
     fetch(currentUrl)
     .then(function(response){
         if (response.ok){
             response.json().then(function(data){
+                console.log("test")
                 // calls the display current function
                 displayCurrent(data);
             })
@@ -136,7 +142,6 @@ function fetchWeatherFuture(lat,lon){
 
 // displays the current weather
 function displayCurrent(data){
-    // console.log(data);
     // clears any text in the section
     currentWeather.text("");
     // gets todays date
@@ -156,15 +161,13 @@ function displayCurrent(data){
 
 // displays the futre weathe
 function displayFuture(data){
-    // console.log(data.list);
     // clears any text already displayed
     futureWeather.text("");
     // gets the weather at noon
     for(var i=5;i<40;i+=8){
-        // console.log(data[i]);
         // converts the date to match the formating
         var date=dayjs(data[i].dt_txt).format("M/D");
-        // console.log(date);
+        //gets the icon
         var icon=getIcon(data[i]);
         // creates card for each day
         var sectionCard=$("<section>").addClass("card");
