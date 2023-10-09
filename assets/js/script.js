@@ -69,11 +69,11 @@ citiesCont.on("click","h4",function(event){
 function fetchLatLon(city){
     // checks if the user also enter the state
     if(city.includes(",")){
-        var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city.split(",")[0].trim()+ "," +city.split(",")[1].trim()+ ",USA&limit=1&appid=5b9958094719db83e44615746cf27208"
+        var cityUrl="https://api.openweathermap.org/geo/1.0/direct?q=" + city.split(",")[0].trim()+ "," +city.split(",")[1].trim()+ ",USA&limit=1&appid=5b9958094719db83e44615746cf27208"
     }
     //user just entered the city
     else{
-        var cityUrl="http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
+        var cityUrl="https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=5b9958094719db83e44615746cf27208";
     }
     fetch(cityUrl)
     .then(function(response){
