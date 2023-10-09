@@ -112,7 +112,6 @@ function fetchLatLon(city){
 
 // fetches the current weather
 function fetchWeatherCurrent(lat,lon){
-    console.log("test")
     var currentUrl="https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=5b9958094719db83e44615746cf27208&units=imperial";
     fetch(currentUrl)
     .then(function(response){

@@ -14,11 +14,15 @@
 
 ## Description
 
+[Visit Deployed Site](https://jamessahunter.github.io/weather-dash/)
+
 The purpose of this project was to create a webstie where the user could search for a city and the current weather would be displayed as well as the forecast for the next 5 days. The information given should be the date, an icon of the weather, the temperature, the wind, and the humidity. The user should also have a search history that they can click on to search for that cities weather again. This project used a server side Application Programming Interface (API) called OpenWeather to retrive the weather of the city. First the latitude and longitude was fetched from their servers then the current and future weather was fetched and appended to the page. The city searches were stored locally in the browser so they remain persitant even after a page refresh. Both the search buttons and the listed cities had event listeners attached to them.
 
 ## Usage 
 
 The user can search for a city and have the weather displayed. The user can also click on a previously searched city to get that weather again.
+
+![Usage Example](/assets/Weather%20Dashboard.gif)
 
 ## Learning Points
 
